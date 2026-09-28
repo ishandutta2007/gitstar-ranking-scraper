@@ -1,12 +1,16 @@
 import csv
 import os
 import time
+from datetime import datetime
 import requests
 from bs4 import BeautifulSoup
 
 DATA_DIR = "data"
 BASE_URL = "https://gitstar-ranking.com/users"
-OUTPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_top10pages.csv")
+
+date_suffix = datetime.now().strftime("%Y_%b")
+OUTPUT_CSV = os.path.join(DATA_DIR, f"gitstar_users_top10pages_{date_suffix}.csv")
+
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"

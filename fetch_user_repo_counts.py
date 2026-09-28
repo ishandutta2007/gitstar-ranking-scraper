@@ -1,11 +1,14 @@
 import csv
 import os
 import time
+from datetime import datetime
 import requests
 
 DATA_DIR = "data"
-INPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_top10pages.csv")
-OUTPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_with_repo_counts.csv")
+date_suffix = datetime.now().strftime("%Y_%b")
+INPUT_CSV = os.path.join(DATA_DIR, f"gitstar_users_top10pages_{date_suffix}.csv")
+OUTPUT_CSV = os.path.join(DATA_DIR, f"gitstar_users_with_repo_counts_{date_suffix}.csv")
+
 
 
 def load_env_token():
