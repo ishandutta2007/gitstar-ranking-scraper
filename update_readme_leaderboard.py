@@ -87,7 +87,19 @@ def update_readme(latest_csv):
 
     markdown_table = generate_markdown_table(top_20)
     
-    readme_content = f"""# Gitstar Ranking Scraper & Leaderboard
+    readme_content = f"""<p align="center">
+  <img src="assets/banner.svg" alt="Gitstar Ranking Scraper Banner" width="100%">
+</p>
+
+# 🌟 Gitstar Ranking Scraper & Leaderboard
+
+<p align="center">
+  <a href="https://github.com/ishandutta2007/Awesome-Awesome-Awesome"><img src="https://img.shields.io/badge/Awesome-%E2%9C%94-blueviolet?style=flat-square&logo=github" alt="Awesome"/></a>
+  <a href="https://discord.gg/jc4xtF58Ve"><img src="https://img.shields.io/badge/Discord-5865F2?style=for-the-badge&logo=discord&logoColor=white" alt="Discord" /></a>
+  <a href="https://github.com/ishandutta2007/gitstar-ranking-scraper"><img src="https://img.shields.io/github/stars/ishandutta2007/gitstar-ranking-scraper?style=social" alt="Stars" /></a>
+  <a href="https://github.com/ishandutta2007/gitstar-ranking-scraper/fork"><img src="https://img.shields.io/github/forks/ishandutta2007/gitstar-ranking-scraper?style=social" alt="Forks" /></a>
+  <a href="https://github.com/ishandutta2007"><img alt="GitHub followers" src="https://img.shields.io/github/followers/ishandutta2007?label=Follow" /></a>
+</p>
 
 A Python toolkit designed to scrape top GitHub user rankings from [Gitstar Ranking](https://gitstar-ranking.com/users), enrich user data with detailed repository metrics (owned vs. forked) via the GitHub REST API, and generate an automated leaderboard inside `README.md`.
 
@@ -95,7 +107,7 @@ All data files are automatically timestamped by year and month (`YYYY_Mon`), ens
 
 ---
 
-## Top 20 Users by Owned Repositories (Sources Count)
+## 🏆 Top 20 Users by Owned Repositories (Sources Count)
 
 > **Last Updated:** `{date_part}` (Extracted from `data/{filename}`)
 
@@ -103,11 +115,13 @@ All data files are automatically timestamped by year and month (`YYYY_Mon`), ens
 
 ---
 
-## Project Structure & Architecture
+## 🏗️ Project Structure & Architecture
 
 ```
 gitstar-ranking-scraper/
 │
+├── assets/                                  # Project banners and visual assets
+│   └── banner.svg
 ├── data/                                    # Output directory for timestamped CSV datasets
 │   ├── gitstar_users_top10pages_2026_Sep.csv
 │   └── gitstar_users_with_repo_counts_2026_Sep.csv
@@ -123,9 +137,9 @@ gitstar-ranking-scraper/
 
 ---
 
-## Detailed Script Overview
+## 📜 Detailed Script Overview
 
-### 1. `scrape_gitstar_users.py` (Stage 1: Web Scraper)
+### 1. 🔍 `scrape_gitstar_users.py` (Stage 1: Web Scraper)
 Scrapes user rankings directly from [https://gitstar-ranking.com/users](https://gitstar-ranking.com/users).
 - **Target Pages:** First 10 pages (100 users per page = 1,000 top ranked users).
 - **Extracted Fields:** `rank`, `username`, `stars`, `avatar_url`, `profile_url`.
@@ -134,7 +148,7 @@ Scrapes user rankings directly from [https://gitstar-ranking.com/users](https://
   - **Resume Support:** Skips already scraped usernames if interrupted.
   - **Timestamped Output:** Saves to `data/gitstar_users_top10pages_YYYY_Mon.csv`.
 
-### 2. `fetch_user_repo_counts.py` (Stage 2: GitHub API Data Enrichment)
+### 2. 📊 `fetch_user_repo_counts.py` (Stage 2: GitHub API Data Enrichment)
 Enriches the scraped user list by fetching granular repository counts from the GitHub REST API.
 - **Metrics Collected:**
   - `sources_count`: Owned / original repositories created by the user.
@@ -146,7 +160,7 @@ Enriches the scraped user list by fetching granular repository counts from the G
   - **Resume Support:** Reads existing enriched dataset to avoid redundant API requests upon rerun.
   - **Timestamped Output:** Reads `data/gitstar_users_top10pages_YYYY_Mon.csv` and outputs `data/gitstar_users_with_repo_counts_YYYY_Mon.csv`.
 
-### 3. `update_readme_leaderboard.py` (Stage 3: README Leaderboard Generator)
+### 3. 📝 `update_readme_leaderboard.py` (Stage 3: README Leaderboard Generator)
 Automates updating the leaderboard table inside `README.md`.
 - **Features:**
   - **Auto-Discovery:** Automatically scans `data/` and identifies the latest CSV dataset by date suffix (`YYYY_Mon`).
@@ -155,19 +169,19 @@ Automates updating the leaderboard table inside `README.md`.
 
 ---
 
-## Prerequisites & Installation
+## ⚙️ Prerequisites & Installation
 
-### Dependencies
+### 📦 Dependencies
 - Python 3.8+
 - `requests`
 - `beautifulsoup4`
 
-### Installation
+### 💻 Installation
 ```bash
 pip install requests beautifulsoup4
 ```
 
-### Environment Configuration (`.env`)
+### 🔑 Environment Configuration (`.env`)
 To avoid GitHub API rate limits (60 requests/hour unauthenticated vs. 5,000 requests/hour authenticated), configure your GitHub Personal Access Token in `.env`:
 
 ```env
@@ -176,7 +190,7 @@ ADMIN_TOKEN=github_pat_your_token_here
 
 ---
 
-## How to Run the Pipeline
+## 🚀 How to Run the Pipeline
 
 Run the pipeline sequentially using standard Python:
 
@@ -193,12 +207,12 @@ python update_readme_leaderboard.py
 
 ---
 
-## Developer Guide & Maintenance
+## 🛠️ Developer Guide & Maintenance
 
-### Monthly Execution Workflow
+### 📅 Monthly Execution Workflow
 Because all output files are automatically timestamped with `YYYY_Mon` (e.g., `2026_Sep`), running the pipeline each month creates a clean historical record inside `data/` without overwriting prior months.
 
-### Modifying Scrape Scope
+### ⚙️ Modifying Scrape Scope
 To change the number of pages scraped:
 1. Open `scrape_gitstar_users.py`.
 2. Update `num_pages`:
@@ -206,7 +220,7 @@ To change the number of pages scraped:
    scrape_gitstar_users(num_pages=20)  # Scrape top 20 pages (2,000 users)
    ```
 
-### Adjusting Batch Save Frequency
+### ⚡ Adjusting Batch Save Frequency
 To change how frequently progress is written during repo count fetching:
 1. Open `fetch_user_repo_counts.py`.
 2. Modify `batch_size`:
@@ -214,19 +228,43 @@ To change how frequently progress is written during repo count fetching:
    process_users(batch_size=50)  # Flushes progress every 50 users
    ```
 
-### Troubleshooting Rate Limits
+### 🛑 Troubleshooting Rate Limits
 If `fetch_user_repo_counts.py` encounters rate limit warnings:
 - Verify `ADMIN_TOKEN` in `.env` is valid and active.
 - Check token permissions (`public_repo` or fine-grained read access).
 
 ---
+
+## ❤️ Support & Sponsorship
+
+Thank you for checking out this project! If you find this toolkit useful, please consider supporting its ongoing development:
+
+- 🌟 **Star this repository** to show your support!
+- 🍴 **Fork it** to customize and add new features.
+- 📢 **Share it** with your fellow developers and community!
+- ☕ **Buy me a coffee / Sponsor:** Feel free to support via [GitHub Sponsors](https://github.com/sponsors/ishandutta2007).
+
+---
+
+## 📈 Star History
+
+[![Star History Chart](https://star-history.dera.page/svg?repos=ishandutta2007/gitstar-ranking-scraper&type=date&legend=top-left)](https://star-history.dera.page/#ishandutta2007/gitstar-ranking-scraper&type=date&legend=top-left)
+
+---
 *Generated automatically by `update_readme_leaderboard.py`.*
 """
+
+    # Ensure any occurrence of sindresorhus/awesome is replaced if present
+    readme_content = readme_content.replace(
+        "https://github.com/sindresorhus/awesome",
+        "https://github.com/ishandutta2007/Awesome-Awesome-Awesome"
+    )
 
     with open(README_FILE, mode="w", encoding="utf-8") as f:
         f.write(readme_content)
 
     print(f"Successfully updated {README_FILE} with top 20 users!")
+
 
 
 def main():
