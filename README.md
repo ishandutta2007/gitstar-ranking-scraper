@@ -22,7 +22,7 @@ All data files are automatically timestamped by year and month (`YYYY_Mon`), ens
 
 > **Last Updated:** `2026_Sep` (Extracted from `data/gitstar_users_with_repo_counts_2026_Sep.csv`)
 
-| # | Username | Owned Repos (Sources) | Stars | Gitstar Profile |
+| # | Username | Owned Repos (Sources) | GitHub_Stars | Gitstar Profile |
 | --- | --- | --- | --- | --- |
 | 1 | [vim-scripts](https://gitstar-ranking.com/vim-scripts) | 5208 | 21667 | [Profile](https://gitstar-ranking.com/vim-scripts) |
 | 2 | [Apress](https://gitstar-ranking.com/Apress) | 3560 | 46191 | [Profile](https://gitstar-ranking.com/Apress) |
@@ -184,3 +184,12 @@ Thank you for checking out this project! If you find this toolkit useful, please
 
 ---
 *Generated automatically by `update_readme_leaderboard.py`.*
+
+## ⭐ Star History
+
+<a href="https://star-history.com/#ishandutta2007/gitstar-ranking-scraper&Timeline" align="center">
+  <picture>
+    <source media="(prefers-color-scheme: dark)" srcset="assets/ishandutta2007_gitstar-ranking-scraper_growth.svg">
+    <img alt="Star History Chart" src="assets/ishandutta2007_gitstar-ranking-scraper_growth.svg">
+  </picture>
+</a>
