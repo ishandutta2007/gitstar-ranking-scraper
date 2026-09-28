@@ -106,7 +106,7 @@ def get_user_repo_counts(username):
         "total_repos_count": total_repos_count
     }
 
-def process_users():
+def process_users(batch_size=100):
     try:
         with open(INPUT_CSV, mode="r", encoding="utf-8") as infile:
             reader = csv.DictReader(infile)
@@ -116,29 +116,54 @@ def process_users():
         return
 
     fieldnames = list(rows[0].keys()) + ["sources_count", "forked_count", "total_repos_count"]
-    
+
+    # Resume support: read already processed users if output CSV exists
+    processed_users = {}
+    if os.path.exists(OUTPUT_CSV):
+        try:
+            with open(OUTPUT_CSV, mode="r", encoding="utf-8") as outfile:
+                reader = csv.DictReader(outfile)
+                for row in reader:
+                    if row.get("username"):
+                        processed_users[row["username"]] = row
+            print(f"Resuming execution: Found {len(processed_users)} already processed users in {OUTPUT_CSV}.")
+        except Exception as e:
+            print(f"Warning: Could not read existing {OUTPUT_CSV} ({e}). Starting fresh.")
+
     updated_rows = []
     total_users = len(rows)
 
-    print(f"Processing {total_users} users from {INPUT_CSV}...")
-    
+    print(f"Processing {total_users} users from {INPUT_CSV} (batch saving every {batch_size} rows)...")
+
     for idx, row in enumerate(rows, start=1):
         username = row.get("username")
+
+        if username in processed_users:
+            # Skip fetching if already in output CSV
+            existing_row = processed_users[username]
+            updated_rows.append(existing_row)
+            continue
+
         print(f"[{idx}/{total_users}] Fetching repo counts for user: {username}...")
-        
+
         counts = get_user_repo_counts(username)
         row.update(counts)
         updated_rows.append(row)
-        
+        processed_users[username] = row
+
+        # Save to disk every `batch_size` items or on the final item
+        if len(updated_rows) % batch_size == 0 or idx == total_users:
+            with open(OUTPUT_CSV, mode="w", newline="", encoding="utf-8") as outfile:
+                writer = csv.DictWriter(outfile, fieldnames=fieldnames)
+                writer.writeheader()
+                writer.writerows(updated_rows)
+            print(f" Saved progress ({len(updated_rows)}/{total_users} rows) to {OUTPUT_CSV}")
+
         time.sleep(0.5)
 
-    with open(OUTPUT_CSV, mode="w", newline="", encoding="utf-8") as outfile:
-        writer = csv.DictWriter(outfile, fieldnames=fieldnames)
-        writer.writeheader()
-        writer.writerows(updated_rows)
-
-    print(f"\nDone! Output saved to {OUTPUT_CSV}")
+    print(f"\nDone! All output saved to {OUTPUT_CSV}")
 
 if __name__ == "__main__":
-    process_users()
+    process_users(batch_size=100)
+
 
