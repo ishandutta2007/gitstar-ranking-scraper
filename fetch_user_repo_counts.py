@@ -3,8 +3,10 @@ import os
 import time
 import requests
 
-INPUT_CSV = "gitstar_users_top10pages.csv"
-OUTPUT_CSV = "gitstar_users_with_repo_counts.csv"
+DATA_DIR = "data"
+INPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_top10pages.csv")
+OUTPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_with_repo_counts.csv")
+
 
 def load_env_token():
     """Simple parser to read ADMIN_TOKEN from .env file if present."""
@@ -153,11 +155,13 @@ def process_users(batch_size=100):
 
         # Save to disk every `batch_size` items or on the final item
         if len(updated_rows) % batch_size == 0 or idx == total_users:
+            os.makedirs(os.path.dirname(OUTPUT_CSV), exist_ok=True)
             with open(OUTPUT_CSV, mode="w", newline="", encoding="utf-8") as outfile:
                 writer = csv.DictWriter(outfile, fieldnames=fieldnames)
                 writer.writeheader()
                 writer.writerows(updated_rows)
             print(f" Saved progress ({len(updated_rows)}/{total_users} rows) to {OUTPUT_CSV}")
+
 
         time.sleep(0.5)
 

@@ -4,8 +4,9 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
+DATA_DIR = "data"
 BASE_URL = "https://gitstar-ranking.com/users"
-OUTPUT_CSV = "gitstar_users_top10pages.csv"
+OUTPUT_CSV = os.path.join(DATA_DIR, "gitstar_users_top10pages.csv")
 
 HEADERS = {
     "User-Agent": "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/120.0.0.0 Safari/537.36"
@@ -17,10 +18,12 @@ def save_to_csv(data, filename):
     if not data:
         return
 
+    os.makedirs(os.path.dirname(filename), exist_ok=True)
     with open(filename, mode="w", newline="", encoding="utf-8") as file:
         writer = csv.DictWriter(file, fieldnames=FIELDNAMES)
         writer.writeheader()
         writer.writerows(data)
+
 
 def load_existing_data(filename):
     existing_data = []
